@@ -31,6 +31,9 @@ jobs:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python precompute.py
 
+      - name: Validate artifacts
+        run: python scripts/check_artifacts.py
+
       - name: Commit refreshed artifacts
         run: |
           git config user.name  "regime-monitor bot"
