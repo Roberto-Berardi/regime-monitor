@@ -57,3 +57,8 @@ Thumbs.db
 # ---------------------------------------------------------
 *.log
 logs/
+
+# Precomputed dashboard outputs ARE committed (the deployed app reads them)
+!data/precomputed/
+!data/precomputed/*.parquet
+!data/precomputed/*.json
