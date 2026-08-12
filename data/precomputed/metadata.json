@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-08-06T10:15:39.010605+00:00",
-  "elapsed_seconds": 30.6,
+  "generated_utc": "2026-08-12T15:02:30.568672+00:00",
+  "elapsed_seconds": 137.1,
   "data_source": "fresh",
-  "data_as_of": "2026-08-06",
-  "latest_rebalance": "2026-08-07",
-  "n_weeks": 1006,
+  "data_as_of": "2026-08-12",
+  "latest_rebalance": "2026-08-14",
+  "n_weeks": 1007,
   "assets": [
     "SP500",
     "EuroStoxx50",
@@ -13,47 +13,46 @@
     "Oil_WTI",
     "US_IG",
     "US_HY",
-    "US_2Y_proxy",
     "US_10Y_proxy"
   ],
   "regime_params": {
-    "high_mean": 0.006912133905615284,
-    "low_mean": -0.42618966989765955,
-    "high_sigma2": 0.035534388133264205,
-    "low_sigma2": 0.014581600469917173,
-    "pct_high": 37.16551040634292,
-    "loglik": 397.52234242473804
+    "high_mean": 0.008951449199321853,
+    "low_mean": -0.4255415305676628,
+    "high_sigma2": 0.03541497423029228,
+    "low_sigma2": 0.014657470925532188,
+    "pct_high": 36.633663366336634,
+    "loglik": 397.3208799796469
   },
-  "p_high_latest": 0.9999999906033814,
+  "p_high_latest": 0.9999999598894681,
   "active_cap_latest": 2.0,
   "strategyb_gate_latest": 0.5,
-  "strategyb_gross_latest": 0.3672883990358824,
+  "strategyb_gross_latest": 0.261156799308523,
   "lookahead": {
     "Tilted": {
-      "base_sharpe": 0.8965629964283754,
-      "lagged_sharpe": 0.7879772761077952,
-      "degradation": 0.12111331914561668,
+      "base_sharpe": 0.7325240454413058,
+      "lagged_sharpe": 0.6824392451368873,
+      "degradation": 0.06837290955308528,
       "verdict": "SAFE"
     },
     "StrategyB": {
-      "base_sharpe": 0.9754064798981857,
-      "lagged_sharpe": 0.75756011919141,
-      "degradation": 0.22333905422641326,
+      "base_sharpe": 0.9068567454915062,
+      "lagged_sharpe": 0.6891959745290512,
+      "degradation": 0.24001670831095295,
       "verdict": "SAFE"
     }
   },
   "dnsi": {
-    "latest_date": "2026-08-02",
-    "latest_value": 0.03,
-    "percentile": 53.62122727540154,
-    "recent_1m": 0.030476190476190483,
-    "recent_12m": -0.03250000000000001,
-    "delta_1m_12m": 0.06297619047619049,
+    "latest_date": "2026-08-09",
+    "latest_value": 0.01,
+    "percentile": 49.07080686897201,
+    "recent_1m": 0.010952380952380951,
+    "recent_12m": -0.03194444444444445,
+    "delta_1m_12m": 0.0428968253968254,
     "hist_min": -0.71,
     "hist_min_date": "1980-05-31",
     "hist_max": 0.46,
     "hist_max_date": "1994-01-03",
-    "hist_mean": 0.00918573865976349
+    "hist_mean": 0.009204892966360852
   },
   "garch_methods": {
     "SP500": "GARCH-t",
@@ -63,52 +62,51 @@
     "Oil_WTI": "GARCH-t",
     "US_IG": "GARCH-t",
     "US_HY": "EWMA-fallback",
-    "US_2Y_proxy": "GARCH-t",
     "US_10Y_proxy": "GARCH-t"
   },
   "risk_now": {
-    "vol_ann": 0.03903819002010641,
-    "vol_weekly": 0.005498882065398875,
-    "duration_years": 1.8784063226150332,
-    "equity_beta": 0.16346939160001056,
-    "var95_weekly": 0.009045660997581148,
-    "es95_weekly": 0.01134419370091788,
-    "n_assets_held": 9.0,
-    "largest_weight": 0.3399927865103989,
-    "largest_asset": "US_2Y_proxy"
+    "vol_ann": 0.04898690210482012,
+    "vol_weekly": 0.006900248123309674,
+    "duration_years": 2.352448686535646,
+    "equity_beta": 0.20841912855988504,
+    "var95_weekly": 0.011350908162844415,
+    "es95_weekly": 0.01423521187838786,
+    "n_assets_held": 8.0,
+    "largest_weight": 0.27736967639143373,
+    "largest_asset": "US_HY"
   },
   "trailing_12m": {
     "period_weeks": 52.0,
-    "ret": 0.07337844582908959,
-    "vol_ann": 0.04016408268387735,
-    "best_week": 0.018235274168907054,
-    "worst_week": -0.010386004981309791,
-    "max_dd": -0.028044874020641597,
-    "pct_up_weeks": 0.6346153846153846,
-    "sharpe_excess": 0.8504835514816947
+    "ret": 0.09495159898006023,
+    "vol_ann": 0.05173020687728986,
+    "best_week": 0.023290920331793644,
+    "worst_week": -0.01432083384055012,
+    "max_dd": -0.03325494462042622,
+    "pct_up_weeks": 0.6153846153846154,
+    "sharpe_excess": 1.0571998524874613
   },
   "trailing_12m_ew": {
     "period_weeks": 52.0,
-    "ret": 0.17207649212888376,
-    "vol_ann": 0.0695946968625667,
-    "best_week": 0.03360691694654778,
-    "worst_week": -0.02437797315224711,
-    "max_dd": -0.04482306725719931,
-    "pct_up_weeks": 0.6730769230769231,
-    "sharpe_excess": 1.7798207895649032
+    "ret": 0.21168373891966152,
+    "vol_ann": 0.07905421627964337,
+    "best_week": 0.03761793833301125,
+    "worst_week": -0.027813928038800367,
+    "max_dd": -0.0506351678059046,
+    "pct_up_weeks": 0.6923076923076923,
+    "sharpe_excess": 1.9985001922683394
   },
   "rebalance_date": "2026-07-31",
   "narrative": {
     "partial_week": true,
-    "sessions": 4,
-    "period_label": "week to date (4 of 5 sessions)",
+    "sessions": 3,
+    "period_label": "week to date (3 of 5 sessions)",
     "regime": "The filtered probability of the high-correlation regime is 1.00. Unchanged from last week. At this level stock-bond diversification is impaired, so the tactical tilt runs at half strength (\u00b12pp).",
-    "moves": "Over the week to date (4 of 5 sessions): gold led at +6.7%; WTI crude lagged at -11.2%. Gold's 6.7% move was in the 98th percentile of its own weekly moves since 2007. Also unusually large for their own history: WTI crude, S&P 500.",
-    "signals": "One trend signal changed state: WTI crude turned neutral (from positive). A signal requires 12-1 month momentum and the 200-day moving average to agree; disagreement produces no position.",
-    "positioning": "Largest weight changes: WTI crude -1.8pp to 3.4%; US 2Y +0.6pp to 34.0%.",
-    "macro": "Most recent tracked releases: Initial Jobless Claims 197,000 vs 187,000 prior (2026-07-25); PCE Price Index -0.10% m/m (2026-06-01); Initial Jobless Claims 187,000 vs 208,000 prior (2026-07-18).",
-    "sentiment": "Economic news sentiment sits at the 54th percentile of its history since 1980, improving over the past month (+0.030 vs -0.033 trailing 12M). Reference indicator only \u2014 not a portfolio input.",
-    "week_end": "2026-08-07"
+    "moves": "Over the week to date (3 of 5 sessions): wti crude led at +6.1%; US 10Y lagged at -0.5%.",
+    "signals": "No trend signals changed state this week. Positioning moves reflect volatility and correlation updates only.",
+    "positioning": "No single asset weight moved more than 50bp this week.",
+    "macro": "Released this week: CPI (index) +0.07% m/m (2026-07-01); Nonfarm Payrolls 158,881 vs 159,001 prior (2026-06-01); Nonfarm Payrolls 158,858 vs 158,984 prior (2026-07-01); Unemployment Rate 4.1 vs 4.2 prior (2026-07-01).",
+    "sentiment": "Economic news sentiment sits at the 49th percentile of its history since 1980, improving over the past month (+0.011 vs -0.032 trailing 12M). Reference indicator only \u2014 not a portfolio input.",
+    "week_end": "2026-08-14"
   },
-  "n_releases": 9
+  "n_releases": 12
 }
