@@ -54,7 +54,8 @@ def build():
     w_delta = w_now - w_prev
 
     # contributions must use SIMPLE returns: portfolio ret = sum(w_i * r_i)
-    contrib = {a: float(w_now[a]) * float(weekly[a]) for a in weekly.index}
+    # weights HELD during the week are those set at the prior rebalance
+    contrib = {a: float(w_prev[a]) * float(weekly[a]) for a in weekly.index}
     gross = sum(contrib.values())
 
     rows = []
@@ -68,6 +69,7 @@ def build():
             "weight": float(w_now[a]),
             "delta": float(w_delta[a]),
             "contrib": contrib[a],
+            "weight_start": float(w_prev[a]),
         })
     rows.sort(key=lambda r: -abs(r["ret"]))
 
