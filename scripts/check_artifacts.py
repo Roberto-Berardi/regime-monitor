@@ -24,7 +24,7 @@ REQUIRED_FILES = [
     "risk_contrib_erc_at_rebalance.parquet", "vol_percentiles.parquet",
     "weekly_moves.parquet", "signals_weekly.parquet", "regime.parquet",
 ]
-MAX_STALE_BDAYS = -1
+MAX_STALE_BDAYS = 5
 
 failures = []
 def check(ok, msg):
