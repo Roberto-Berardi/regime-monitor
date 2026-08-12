@@ -241,6 +241,14 @@ def fetch_all_fred(start: str = None) -> pd.DataFrame:
         print(f"    {col:15s} {n:5d} NaN")
     if failed:
         print(f"  FAILED:   {failed}")
+        core = set(config.DURATIONS) | {"RF_RATE"}
+        missing_core = sorted(core.intersection(failed))
+        if missing_core:
+            raise RuntimeError(
+                f"core FRED series failed to download: {missing_core}. "
+                "Refusing to build a panel with a missing asset - the "
+                "portfolio would silently run short one leg."
+            )
 
     return df
 
@@ -358,9 +366,9 @@ def validate(df: pd.DataFrame) -> tuple[bool, list[str]]:
     # (a) at least 8 of 9 core columns present
     #     (SP500, EuroStoxx50, MSCI_EM, Gold, Oil_WTI, US_IG, US_HY, US_2Y, US_10Y)
     core_cols = list(config.ASSETS.keys()) + list(config.DURATIONS.keys())
-    present = sum(c in df.columns for c in core_cols)
-    if present < 8:
-        issues.append(f"only {present} of {len(core_cols)} core columns present")
+    absent = [c for c in core_cols if c not in df.columns]
+    if absent:
+        issues.append(f"core columns missing: {absent}")
 
     # (b) no core column entirely NaN
     for col in core_cols:
