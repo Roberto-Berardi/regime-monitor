@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-08-13T07:55:44.264926+00:00",
-  "elapsed_seconds": 50.4,
+  "generated_utc": "2026-08-14T07:53:17.594081+00:00",
+  "elapsed_seconds": 49.1,
   "data_source": "fresh",
-  "data_as_of": "2026-08-13",
+  "data_as_of": "2026-08-14",
   "latest_rebalance": "2026-08-14",
   "n_weeks": 1007,
   "assets": [
@@ -17,28 +17,28 @@
     "US_10Y_proxy"
   ],
   "regime_params": {
-    "high_mean": 0.008900120719556306,
-    "low_mean": -0.4255526857414926,
-    "high_sigma2": 0.03538891931697816,
-    "low_sigma2": 0.01465764046557823,
+    "high_mean": 0.008858791903095601,
+    "low_mean": -0.42556855844697644,
+    "high_sigma2": 0.03538444684874446,
+    "low_sigma2": 0.014656556624527143,
     "pct_high": 36.633663366336634,
-    "loglik": 397.4420358683833
+    "loglik": 397.4552970844301
   },
-  "p_high_latest": 0.9999999074863626,
+  "p_high_latest": 0.999999862094111,
   "active_cap_latest": 2.0,
   "strategyb_gate_latest": 0.5,
-  "strategyb_gross_latest": 0.3850727828249873,
+  "strategyb_gross_latest": 0.3872763221307254,
   "lookahead": {
     "Tilted": {
-      "base_sharpe": 0.8717230837508946,
-      "lagged_sharpe": 0.7713378412026586,
-      "degradation": 0.11515726085432228,
+      "base_sharpe": 0.8675195212309469,
+      "lagged_sharpe": 0.7636796618707381,
+      "degradation": 0.11969743252908892,
       "verdict": "SAFE"
     },
     "StrategyB": {
-      "base_sharpe": 0.9776840955413507,
-      "lagged_sharpe": 0.7597271956224796,
-      "degradation": 0.22293182523153027,
+      "base_sharpe": 0.9791681581873242,
+      "lagged_sharpe": 0.7610551728426281,
+      "degradation": 0.22275334785035866,
       "verdict": "SAFE"
     }
   },
@@ -63,50 +63,50 @@
     "Oil_WTI": "GARCH-t",
     "US_IG": "GARCH-t",
     "US_HY": "EWMA-fallback",
-    "US_2Y_proxy": "GARCH-t",
+    "US_2Y_proxy": "GARCH-t (retry 1)",
     "US_10Y_proxy": "GARCH-t"
   },
   "risk_now": {
-    "vol_ann": 0.039122505454322484,
-    "vol_weekly": 0.005510758656726708,
-    "duration_years": 1.8524925544414361,
-    "equity_beta": 0.16486443838119122,
-    "var95_weekly": 0.009065197990315434,
-    "es95_weekly": 0.011368695108827199,
+    "vol_ann": 0.037454767995782096,
+    "vol_weekly": 0.005275842755250786,
+    "duration_years": 1.8464814878314342,
+    "equity_beta": 0.155959286121333,
+    "var95_weekly": 0.008678761332387543,
+    "es95_weekly": 0.010884063604082372,
     "n_assets_held": 9.0,
-    "largest_weight": 0.28126714758562343,
+    "largest_weight": 0.2823123059796128,
     "largest_asset": "US_2Y_proxy"
   },
   "trailing_12m": {
     "period_weeks": 52.0,
-    "ret": 0.0799618067346648,
-    "vol_ann": 0.04233464036037669,
-    "best_week": 0.019573815276355065,
-    "worst_week": -0.01079935132437594,
-    "max_dd": -0.029106721479978948,
+    "ret": 0.0811082902205853,
+    "vol_ann": 0.041844034507362564,
+    "best_week": 0.018788530093739812,
+    "worst_week": -0.010531021176064498,
+    "max_dd": -0.02859916790437511,
     "pct_up_weeks": 0.6346153846153846,
-    "sharpe_excess": 0.9554592189754302
+    "sharpe_excess": 0.9917155928020694
   },
   "trailing_12m_ew": {
     "period_weeks": 52.0,
-    "ret": 0.18829844199304535,
-    "vol_ann": 0.07019978826322772,
-    "best_week": 0.03360691694654775,
-    "worst_week": -0.024377954623147385,
-    "max_dd": -0.044823059332282034,
+    "ret": 0.1915021131469017,
+    "vol_ann": 0.07046100413913264,
+    "best_week": 0.03360691692010167,
+    "worst_week": -0.024377962456399088,
+    "max_dd": -0.044823064281814706,
     "pct_up_weeks": 0.6923076923076923,
-    "sharpe_excess": 1.9627765926929437
+    "sharpe_excess": 1.9941503650283607
   },
   "rebalance_date": "2026-07-31",
   "narrative": {
-    "partial_week": true,
-    "sessions": 4,
-    "period_label": "week to date (4 of 5 sessions)",
+    "partial_week": false,
+    "sessions": 5,
+    "period_label": "week",
     "regime": "The filtered probability of the high-correlation regime is 1.00. Unchanged from last week. At this level stock-bond diversification is impaired, so the tactical tilt runs at half strength (\u00b12pp).",
-    "moves": "Over the week to date (4 of 5 sessions): wti crude led at +4.7%; US IG credit lagged at -0.4%.",
+    "moves": "Over the week: wti crude led at +5.9%; US 10Y lagged at -0.2%.",
     "signals": "No trend signals changed state this week. Positioning moves reflect volatility and correlation updates only.",
     "positioning": "No single asset weight moved more than 50bp this week.",
-    "macro": "Released this week: CPI (index) +0.07% m/m (2026-07-01); Nonfarm Payrolls 158,881 vs 159,001 prior (2026-06-01); Nonfarm Payrolls 158,858 vs 158,984 prior (2026-07-01); Unemployment Rate 4.1 vs 4.2 prior (2026-07-01).",
+    "macro": "Released this week: Initial Jobless Claims 209,000 vs 199,000 prior (2026-08-08); CPI (index) +0.07% m/m (2026-07-01); Nonfarm Payrolls 158,881 vs 159,001 prior (2026-06-01); Nonfarm Payrolls 158,858 vs 158,984 prior (2026-07-01); Unemployment Rate 4.1 vs 4.2 prior (2026-07-01).",
     "sentiment": "Economic news sentiment sits at the 49th percentile of its history since 1980, improving over the past month (+0.011 vs -0.032 trailing 12M). Reference indicator only \u2014 not a portfolio input.",
     "week_end": "2026-08-14"
   },
