@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-08-14T07:53:17.594081+00:00",
-  "elapsed_seconds": 49.1,
+  "generated_utc": "2026-08-17T07:18:57.761328+00:00",
+  "elapsed_seconds": 49.5,
   "data_source": "fresh",
-  "data_as_of": "2026-08-14",
-  "latest_rebalance": "2026-08-14",
-  "n_weeks": 1007,
+  "data_as_of": "2026-08-17",
+  "latest_rebalance": "2026-08-21",
+  "n_weeks": 1008,
   "assets": [
     "SP500",
     "EuroStoxx50",
@@ -17,43 +17,43 @@
     "US_10Y_proxy"
   ],
   "regime_params": {
-    "high_mean": 0.008858791903095601,
-    "low_mean": -0.42556855844697644,
-    "high_sigma2": 0.03538444684874446,
-    "low_sigma2": 0.014656556624527143,
-    "pct_high": 36.633663366336634,
-    "loglik": 397.4552970844301
+    "high_mean": 0.010943755297805386,
+    "low_mean": -0.4249352482115207,
+    "high_sigma2": 0.03530188864094179,
+    "low_sigma2": 0.01472953106264847,
+    "pct_high": 36.39960435212661,
+    "loglik": 397.13151224119173
   },
-  "p_high_latest": 0.999999862094111,
+  "p_high_latest": 0.9999999368039688,
   "active_cap_latest": 2.0,
   "strategyb_gate_latest": 0.5,
-  "strategyb_gross_latest": 0.3872763221307254,
+  "strategyb_gross_latest": 0.3892737773139734,
   "lookahead": {
     "Tilted": {
-      "base_sharpe": 0.8675195212309469,
-      "lagged_sharpe": 0.7636796618707381,
-      "degradation": 0.11969743252908892,
+      "base_sharpe": 0.9009659281006069,
+      "lagged_sharpe": 0.7922608274773656,
+      "degradation": 0.12065395286635382,
       "verdict": "SAFE"
     },
     "StrategyB": {
-      "base_sharpe": 0.9791681581873242,
-      "lagged_sharpe": 0.7610551728426281,
-      "degradation": 0.22275334785035866,
+      "base_sharpe": 0.9782349888500897,
+      "lagged_sharpe": 0.7603067751340983,
+      "degradation": 0.2227769566616759,
       "verdict": "SAFE"
     }
   },
   "dnsi": {
-    "latest_date": "2026-08-09",
-    "latest_value": 0.01,
-    "percentile": 49.07080686897201,
-    "recent_1m": 0.010952380952380951,
-    "recent_12m": -0.03194444444444445,
-    "delta_1m_12m": 0.0428968253968254,
+    "latest_date": "2026-08-02",
+    "latest_value": 0.03,
+    "percentile": 53.62122727540154,
+    "recent_1m": 0.030476190476190483,
+    "recent_12m": -0.03250000000000001,
+    "delta_1m_12m": 0.06297619047619049,
     "hist_min": -0.71,
     "hist_min_date": "1980-05-31",
     "hist_max": 0.46,
     "hist_max_date": "1994-01-03",
-    "hist_mean": 0.009204892966360852
+    "hist_mean": 0.00918573865976349
   },
   "garch_methods": {
     "SP500": "GARCH-t",
@@ -63,52 +63,52 @@
     "Oil_WTI": "GARCH-t",
     "US_IG": "GARCH-t",
     "US_HY": "EWMA-fallback",
-    "US_2Y_proxy": "GARCH-t (retry 1)",
+    "US_2Y_proxy": "GARCH-t",
     "US_10Y_proxy": "GARCH-t"
   },
   "risk_now": {
-    "vol_ann": 0.037454767995782096,
-    "vol_weekly": 0.005275842755250786,
-    "duration_years": 1.8464814878314342,
-    "equity_beta": 0.155959286121333,
-    "var95_weekly": 0.008678761332387543,
-    "es95_weekly": 0.010884063604082372,
+    "vol_ann": 0.035361693623628385,
+    "vol_weekly": 0.004981014303402631,
+    "duration_years": 1.8448057874844541,
+    "equity_beta": 0.16029935400868722,
+    "var95_weekly": 0.008193768529097327,
+    "es95_weekly": 0.010275832507919629,
     "n_assets_held": 9.0,
-    "largest_weight": 0.2823123059796128,
+    "largest_weight": 0.32873705481937254,
     "largest_asset": "US_2Y_proxy"
   },
   "trailing_12m": {
     "period_weeks": 52.0,
-    "ret": 0.0811082902205853,
-    "vol_ann": 0.041844034507362564,
-    "best_week": 0.018788530093739812,
-    "worst_week": -0.010531021176064498,
-    "max_dd": -0.02859916790437511,
+    "ret": 0.07361997180253965,
+    "vol_ann": 0.04053544882635305,
+    "best_week": 0.018348274379435273,
+    "worst_week": -0.010457277222342938,
+    "max_dd": -0.02812372617000103,
     "pct_up_weeks": 0.6346153846153846,
-    "sharpe_excess": 0.9917155928020694
+    "sharpe_excess": 0.8523009459180123
   },
   "trailing_12m_ew": {
     "period_weeks": 52.0,
-    "ret": 0.1915021131469017,
-    "vol_ann": 0.07046100413913264,
-    "best_week": 0.03360691692010167,
-    "worst_week": -0.024377962456399088,
-    "max_dd": -0.044823064281814706,
+    "ret": 0.18265105910614698,
+    "vol_ann": 0.07023534649628216,
+    "best_week": 0.03360690073513038,
+    "worst_week": -0.024377954623147385,
+    "max_dd": -0.0448230565720974,
     "pct_up_weeks": 0.6923076923076923,
-    "sharpe_excess": 1.9941503650283607
+    "sharpe_excess": 1.8947307788486185
   },
   "rebalance_date": "2026-07-31",
   "narrative": {
-    "partial_week": false,
-    "sessions": 5,
-    "period_label": "week",
+    "partial_week": true,
+    "sessions": 1,
+    "period_label": "week to date (1 of 5 sessions)",
     "regime": "The filtered probability of the high-correlation regime is 1.00. Unchanged from last week. At this level stock-bond diversification is impaired, so the tactical tilt runs at half strength (\u00b12pp).",
-    "moves": "Over the week: wti crude led at +5.9%; US 10Y lagged at -0.2%.",
+    "moves": "Over the week to date (1 of 5 sessions): gold led at +1.7%; WTI crude lagged at -0.8%.",
     "signals": "No trend signals changed state this week. Positioning moves reflect volatility and correlation updates only.",
     "positioning": "No single asset weight moved more than 50bp this week.",
-    "macro": "Released this week: Initial Jobless Claims 209,000 vs 199,000 prior (2026-08-08); CPI (index) +0.07% m/m (2026-07-01); Nonfarm Payrolls 158,881 vs 159,001 prior (2026-06-01); Nonfarm Payrolls 158,858 vs 158,984 prior (2026-07-01); Unemployment Rate 4.1 vs 4.2 prior (2026-07-01).",
-    "sentiment": "Economic news sentiment sits at the 49th percentile of its history since 1980, improving over the past month (+0.011 vs -0.032 trailing 12M). Reference indicator only \u2014 not a portfolio input.",
-    "week_end": "2026-08-14"
+    "macro": "Released this week: Retail Sales +0.57% m/m (2026-06-01); Retail Sales -0.64% m/m (2026-07-01).",
+    "sentiment": "Economic news sentiment sits at the 54th percentile of its history since 1980, improving over the past month (+0.030 vs -0.033 trailing 12M). Reference indicator only \u2014 not a portfolio input.",
+    "week_end": "2026-08-21"
   },
-  "n_releases": 12
+  "n_releases": 13
 }
