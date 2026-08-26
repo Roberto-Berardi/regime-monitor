@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-08-25T07:10:28.341828+00:00",
-  "elapsed_seconds": 48.0,
+  "generated_utc": "2026-08-26T07:10:53.209518+00:00",
+  "elapsed_seconds": 41.1,
   "data_source": "fresh",
-  "data_as_of": "2026-08-25",
+  "data_as_of": "2026-08-26",
   "latest_rebalance": "2026-08-28",
   "n_weeks": 1009,
   "assets": [
@@ -17,43 +17,43 @@
     "US_10Y_proxy"
   ],
   "regime_params": {
-    "high_mean": 0.012838777080529707,
-    "low_mean": -0.4242746057398982,
-    "high_sigma2": 0.03517358832375146,
-    "low_sigma2": 0.014799162424518592,
+    "high_mean": 0.012636055959639066,
+    "low_mean": -0.42433370656592956,
+    "high_sigma2": 0.03514947083229946,
+    "low_sigma2": 0.014793543394924865,
     "pct_high": 36.16600790513834,
-    "loglik": 397.04218776474545
+    "loglik": 397.2277661103574
   },
-  "p_high_latest": 0.9999996809278169,
+  "p_high_latest": 0.9999986387912007,
   "active_cap_latest": 2.0,
   "strategyb_gate_latest": 0.5,
-  "strategyb_gross_latest": 0.4189000853988174,
+  "strategyb_gross_latest": 0.4188062187200199,
   "lookahead": {
     "Tilted": {
-      "base_sharpe": 0.8800033966885838,
-      "lagged_sharpe": 0.7779778260281927,
-      "degradation": 0.1159377009728703,
+      "base_sharpe": 0.902448616701668,
+      "lagged_sharpe": 0.7910459180745286,
+      "degradation": 0.12344492147852329,
       "verdict": "SAFE"
     },
     "StrategyB": {
-      "base_sharpe": 0.9768408327654802,
-      "lagged_sharpe": 0.758619374779835,
-      "degradation": 0.22339510252438,
+      "base_sharpe": 0.9774130004230505,
+      "lagged_sharpe": 0.759214336705126,
+      "degradation": 0.22324100827744495,
       "verdict": "SAFE"
     }
   },
   "dnsi": {
-    "latest_date": "2026-08-23",
-    "latest_value": -0.0,
-    "percentile": 46.76812786461394,
-    "recent_1m": 0.007619047619047618,
-    "recent_12m": -0.03353174603174603,
-    "delta_1m_12m": 0.041150793650793646,
+    "latest_date": "2026-07-20",
+    "latest_value": 0.02,
+    "percentile": 51.48374941121055,
+    "recent_1m": 0.08523809523809525,
+    "recent_12m": -0.0355952380952381,
+    "delta_1m_12m": 0.12083333333333335,
     "hist_min": -0.71,
     "hist_min_date": "1980-05-31",
     "hist_max": 0.46,
     "hist_max_date": "1994-01-03",
-    "hist_mean": 0.00910976612998002
+    "hist_mean": 0.009184526613283091
   },
   "garch_methods": {
     "SP500": "GARCH-t",
@@ -67,47 +67,47 @@
     "US_10Y_proxy": "GARCH-t"
   },
   "risk_now": {
-    "vol_ann": 0.03852090196268711,
-    "vol_weekly": 0.005426017364957511,
-    "duration_years": 1.851241247042156,
-    "equity_beta": 0.1803439039894719,
-    "var95_weekly": 0.008925798565355107,
-    "es95_weekly": 0.011193873823907347,
+    "vol_ann": 0.035784648418055585,
+    "vol_weekly": 0.005040591310747293,
+    "duration_years": 1.8448436708825058,
+    "equity_beta": 0.17415382454571077,
+    "var95_weekly": 0.008291772706179297,
+    "es95_weekly": 0.010398739874071666,
     "n_assets_held": 9.0,
-    "largest_weight": 0.2858010222543297,
+    "largest_weight": 0.3266681805867498,
     "largest_asset": "US_2Y_proxy"
   },
   "trailing_12m": {
     "period_weeks": 52.0,
-    "ret": 0.07695127879183383,
-    "vol_ann": 0.04203960174991003,
-    "best_week": 0.01941205767408177,
-    "worst_week": -0.010739712064427497,
-    "max_dd": -0.02894991954205206,
+    "ret": 0.07527486212544976,
+    "vol_ann": 0.040669031031924645,
+    "best_week": 0.01867763829705944,
+    "worst_week": -0.010200044346528079,
+    "max_dd": -0.028366620008004384,
     "pct_up_weeks": 0.6346153846153846,
-    "sharpe_excess": 0.8986253550483723
+    "sharpe_excess": 0.8892398479134057
   },
   "trailing_12m_ew": {
     "period_weeks": 52.0,
-    "ret": 0.1891183982960889,
-    "vol_ann": 0.07077146181582109,
-    "best_week": 0.0336069007351304,
-    "worst_week": -0.02437796531899541,
-    "max_dd": -0.04482306703265748,
+    "ret": 0.1880100615317939,
+    "vol_ann": 0.07087221498905785,
+    "best_week": 0.03360690876812374,
+    "worst_week": -0.024377962456399088,
+    "max_dd": -0.04482305679663945,
     "pct_up_weeks": 0.6923076923076923,
-    "sharpe_excess": 1.9592486718845892
+    "sharpe_excess": 1.943388445344221
   },
   "rebalance_date": "2026-07-31",
   "narrative": {
     "partial_week": true,
-    "sessions": 2,
-    "period_label": "week to date (2 of 5 sessions)",
+    "sessions": 3,
+    "period_label": "week to date (3 of 5 sessions)",
     "regime": "The filtered probability of the high-correlation regime is 1.00. Unchanged from last week. At this level stock-bond diversification is impaired, so the tactical tilt runs at half strength (\u00b12pp).",
-    "moves": "Over the week to date (2 of 5 sessions): gold led at +1.5%; WTI crude lagged at -3.3%.",
+    "moves": "Over the week to date (3 of 5 sessions): gold led at +1.4%; WTI crude lagged at -7.6%. Wti crude's 7.6% move was in the 87th percentile of its own weekly moves since 2007.",
     "signals": "No trend signals changed state this week. Positioning moves reflect volatility and correlation updates only.",
     "positioning": "No single asset weight moved more than 50bp this week.",
     "macro": "Most recent tracked releases: Initial Jobless Claims 206,000 vs 209,000 prior (2026-08-15); Industrial Production +0.35% m/m (2026-07-01); Retail Sales +0.57% m/m (2026-06-01).",
-    "sentiment": "Economic news sentiment sits at the 47th percentile of its history since 1980, improving over the past month (+0.008 vs -0.034 trailing 12M). Reference indicator only \u2014 not a portfolio input.",
+    "sentiment": "Economic news sentiment sits at the 51st percentile of its history since 1980, improving over the past month (+0.085 vs -0.036 trailing 12M). Reference indicator only \u2014 not a portfolio input.",
     "week_end": "2026-08-28"
   },
   "n_releases": 13
