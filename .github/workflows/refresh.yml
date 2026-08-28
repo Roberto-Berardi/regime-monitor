@@ -12,7 +12,6 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,20 +28,23 @@ jobs:
       - name: Run pipeline
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-        run: python precompute.py
+        run: python precompute_rotation.py
 
       - name: Validate artifacts
-        run: python scripts/check_artifacts.py
+        run: python scripts/check_rotation.py
 
-      - name: Commit refreshed artifacts
+      - name: Build the page
+        run: python scripts/build_site.py
+
+      - name: Commit refreshed artifacts and page
         run: |
           git config user.name  "regime-monitor bot"
           git config user.email "actions@github.com"
-          git add data/precomputed/
+          git add data/rotation/ docs/
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
             git commit -m "Data refresh $(date -u +'%Y-%m-%d')"
             git push
-            echo "Artifacts committed and pushed."
+            echo "Artifacts and page committed."
           fi

@@ -12,6 +12,31 @@ this file. Do not hardcode constants elsewhere.
 # Bonds are represented via yields (from FRED) later converted to return
 # proxies via modified duration in src/returns.py.
 ASSETS = {
+    # Rate-regime factor rotation universe (from 2002-07-30).
+    # IWF/IWD are the equity duration axis; IEF/SHY are the defensive
+    # sleeve, selected by the rate signal rather than held together.
+    "Growth":    "IWF",      # Russell 1000 Growth  - long duration
+    "Value":     "IWD",      # Russell 1000 Value   - short duration
+    "Bond_Long": "IEF",      # 7-10Y Treasury  - hedge when rates fall
+    "Bond_Short": "SHY",     # 1-3Y Treasury   - preservation when rates rise
+    "Gold":      "GLD",      # zero cash flow - longest duration asset
+    "Energy":    "XLE",      # cash flows now, inflation-linked - shortest
+    "Market":    "SPY",      # benchmark only, not allocated
+}
+
+# Sleeves the optimiser may allocate to. SPY is fetched as a benchmark only.
+ALLOCATED_ASSETS = ["Growth", "Gold", "Value", "Energy",
+                    "Bond_Long", "Bond_Short"]
+
+# Equity duration axis and the two defensive sleeves.
+# The duration axis, in two buckets.
+LONG_DURATION = ["Growth", "Gold"]      # rate-sensitive, favoured when score > 0
+SHORT_DURATION = ["Value", "Energy"]    # cash now, favoured when score < 0
+EQUITY_SLEEVES = LONG_DURATION + SHORT_DURATION
+DEFENSIVE_SLEEVES = {"IEF": "Bond_Long", "SHY": "Bond_Short"}
+
+# Previous nine-asset universe, retained for the archived ERC study.
+OLD_ASSETS = {
     "SP500":        "SPY",      # was ^GSPC (price index) — SPY includes dividends
     "EuroStoxx50":  "FEZ",      # was ^STOXX50E (price index) — FEZ is USD, includes dividends
     "MSCI_EM":     "EEM",       # iShares MSCI EM ETF (proxy)
@@ -44,6 +69,8 @@ FRED_SERIES = {
     "AAA_SPREAD":  "AAA10Y",     # Moody's Aaa - 10Y Treasury, daily since 1986
 
     # Risk-free rate for excess-Sharpe computation
+    "WALCL":       "WALCL",     # Fed total assets, weekly, liquidity signal
+    "WRESBAL":     "WRESBAL",   # reserve balances, robustness check
     "RF_RATE":     "DGS3MO",     # 3-Month Treasury Constant Maturity
 
     # ALFRED point-in-time data
@@ -62,7 +89,7 @@ DURATIONS = {
 # ---------------------------------------------------------------------------
 # 2. SAMPLE PERIOD
 # ---------------------------------------------------------------------------
-START_DATE = "2005-01-01"
+START_DATE = "2002-07-30"
 
 # ---------------------------------------------------------------------------
 # 3. GARCH MODEL
@@ -134,6 +161,11 @@ CACHE_FILE   = DATA_DIR / "prices_cache.parquet"
 # Each asset sized to a target vol contribution; aggregate leverage vol-scales
 # to hit 8% portfolio vol target; regime-gated cap on leverage.
 STRAT_B_PER_ASSET_VOL_BUDGET   = 0.015  # 1.5% ann vol contribution per asset (natural aggregate ~8% under 0.3 correlation)
+# Cap any single asset in the main ERC book. Unconstrained, ERC sizes
+# inversely to volatility, and the 2Y duration proxy (~1.3% ann vol)
+# would take roughly half the portfolio.
+ERC_MAX_PER_ASSET_WEIGHT = 0.25
+
 STRAT_B_MAX_PER_ASSET_WEIGHT   = 0.25   # cap per-asset weight at 25% to prevent low-vol assets (US_2Y) dominating
 # Vol targeting REMOVED after layer ablation (2026-08-05): with an 8% target
 # against a book whose natural vol is ~7.4%, the mechanism levered up rather
