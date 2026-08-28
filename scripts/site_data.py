@@ -86,7 +86,9 @@ def build():
         "week_end": fri.date().isoformat(),
         "data_as_of": meta["data_as_of"],
         "rebalance_date": meta.get("rebalance_date"),
-        "next_rebalance": str(pd.Timestamp(meta["latest_rebalance"]).date()),
+        # two distinct cadences, both stated as past facts
+        "weights_set_on": fri.date().isoformat(),          # weekly tilt reset
+        "anchor_solved_on": meta.get("rebalance_date"),    # monthly ERC solve
         "p_high": float(meta["p_high_latest"]),
         "tilt_cap_pp": float(meta["active_cap_latest"]),
         "gate_active": float(meta["active_cap_latest"]) < 4.0,

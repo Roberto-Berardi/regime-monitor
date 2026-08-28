@@ -101,7 +101,9 @@ def solve_erc(H: np.ndarray, previous_weights: np.ndarray = None) -> dict:
     H = regularize_covariance(H)
     n = H.shape[0]
 
-    bounds = [(1e-8, 1.0) for _ in range(n)]         # long-only, tiny epsilon
+    cap = getattr(config, "ERC_MAX_PER_ASSET_WEIGHT", 1.0)
+    cap = max(cap, 1.0 / n + 1e-9)   # must stay feasible
+    bounds = [(1e-8, cap) for _ in range(n)]         # long-only, capped
     cons   = {"type": "eq", "fun": lambda w: np.sum(w) - 1.0}
 
     # Build list of starting points

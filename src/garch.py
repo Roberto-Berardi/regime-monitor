@@ -63,8 +63,16 @@ def fit_garch(returns: pd.Series, name: str = "asset") -> dict:
     if len(r) < 100:
         raise ValueError(f"[{name}] too few observations ({len(r)}) for GARCH fit")
 
-    # Scale to percent, matching Project 2's convention for numerical stability
-    r_pct = r * 100.0
+    # Scale so the series sits inside arch's workable band (std ~10).
+    # For equities this lands at ~100, matching Project 2's convention; for
+    # very low-volatility series such as the 2Y duration proxy it lands
+    # higher. The multiplier cancels out when converting sigma back, so it
+    # changes nothing except the optimiser's numerical footing.
+    raw_sd = float(r.std())
+    if raw_sd <= 0 or not np.isfinite(raw_sd):
+        raise ValueError(f"[{name}] degenerate return series (std={raw_sd})")
+    SCALE = 10.0 ** round(np.log10(10.0 / raw_sd))
+    r_pct = r * SCALE
 
     # Fit GARCH(1,1) with Student-t
     am = arch_model(r_pct, mean="constant", vol="GARCH", p=1, q=1, dist="t", rescale=False)
@@ -78,9 +86,27 @@ def fit_garch(returns: pd.Series, name: str = "asset") -> dict:
     beta  = float(params["beta[1]"])
     nu    = float(params["nu"])
 
-    # Conditional vol is on percent scale; convert back to decimal
-    sigma_pct     = res.conditional_volatility   # daily vol in percent
-    sigma_decimal = sigma_pct / 100.0
+    # Convert conditional vol back to decimal units
+    sigma_pct     = res.conditional_volatility
+    sigma_decimal = sigma_pct / SCALE
+
+    # Plausibility guard. `converged` alone is not trustworthy: a diverged
+    # fit can report success while implying a volatility hundreds of times
+    # the realised one. Reject anything that far from reality so the caller
+    # falls back to EWMA.
+    # Compare against RECENT realised vol, not the full sample: conditional
+    # vol is a statement about today, and a full-sample sigma spanning 2008
+    # and 2020 is not the right yardstick for a calm market.
+    ann_fit      = float(sigma_decimal.iloc[-1]) * np.sqrt(252)
+    ann_realised = float(r.tail(60).std()) * np.sqrt(252)
+    ratio = ann_fit / ann_realised if ann_realised > 0 else np.inf
+    if not 0.1 <= ratio <= 10.0:
+        raise RuntimeError(
+            f"[{name}] GARCH fit implausible: implied annualised vol "
+            f"{ann_fit:.2%} vs realised {ann_realised:.2%} "
+            f"(ratio {ratio:.1f}x, mu={float(params['mu']):.4f}). "
+            "Rejecting so the caller can fall back to EWMA."
+        )
     sigma_decimal.name = f"{name}_sigma"
 
     # Standardised residuals (scale-invariant, use arch's directly)
@@ -174,7 +200,10 @@ def fit_garch_hardened(returns: pd.Series, name: str = "asset",
 
     # Retries with perturbed starting values via arch's internal 'starting_values'.
     # We pass in different mu/vol starts to nudge the optimizer to a new basin.
-    r_pct = r * 100.0
+    raw_sd = float(r.std())
+    SCALE = 10.0 ** round(np.log10(10.0 / raw_sd)) if raw_sd > 0 else 100.0
+    r_pct = r * SCALE
+    ann_recent = float(r.tail(60).std()) * np.sqrt(252)
     for attempt in range(1, n_retries + 1):
         try:
             # Perturb: use asset's own rolling stats to generate alternative starts
@@ -192,9 +221,17 @@ def fit_garch_hardened(returns: pd.Series, name: str = "asset",
             p = res.params
             alpha = float(p["alpha[1]"])
             beta  = float(p["beta[1]"])
-            if res.convergence_flag == 0 and (alpha + beta) < 0.9999:
+            sigma_try = res.conditional_volatility / SCALE
+            ann_try = float(sigma_try.iloc[-1]) * np.sqrt(252)
+            ratio = ann_try / ann_recent if ann_recent > 0 else np.inf
+            plausible = 0.1 <= ratio <= 10.0
+            if not plausible:
+                print(f"[fit_garch_hardened] {name}: retry {attempt} converged but "
+                      f"implies {ann_try:.1%} vol vs {ann_recent:.1%} realised "
+                      f"({ratio:.0f}x) - rejecting")
+            if res.convergence_flag == 0 and (alpha + beta) < 0.9999 and plausible:
                 print(f"[fit_garch_hardened] {name}: retry {attempt} converged")
-                sigma = res.conditional_volatility / 100.0
+                sigma = sigma_try
                 sigma.name = f"{name}_sigma"
                 z = res.std_resid
                 z.name = f"{name}_z"
