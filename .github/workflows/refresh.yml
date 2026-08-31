@@ -48,3 +48,7 @@ jobs:
             git push
             echo "Artifacts and page committed."
           fi
+
+      - name: Ping the dead man's switch
+        if: success()
+        run: curl -fsS -m 10 --retry 3 "${{ secrets.HEALTHCHECK_URL }}" || true
