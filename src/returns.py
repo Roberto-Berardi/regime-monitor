@@ -1,8 +1,8 @@
 """
 Returns computation for the Cross-Asset Regime Monitor.
 
-Faithful port of the return-computation logic from EMiF Project 2
-(Piras, D'Amico, Berardi 2025), extended with bond carry and unified
+Return computation: log returns for prices, modified-duration proxies
+Log returns with bond carry and unified
 winsorization.
 
 Conventions:
@@ -143,7 +143,7 @@ def compute_returns(panel: pd.DataFrame) -> pd.DataFrame:
 # 3. RECONCILIATION vs PROJECT 2
 # =============================================================================
 
-# Project 2 annualized daily vols (Piras, D'Amico, Berardi 2025)
+# reference annualised daily vols, for the reconciliation check
 # Sample: 2005-01-04 to 2026-04-24, 5559 obs, ffill business days.
 # NB: reconciliation targets assume the PRE-CARRY convention Project 2 used.
 # With carry added, our bond proxies will show slightly higher return but

@@ -92,10 +92,10 @@ def dwell_note(m):
 
 
 def build_chart_json():
-    eq = pd.read_parquet(ART / "equity_monthly.parquet")
-    lr = np.log(eq / eq.shift(1)).dropna()
+    """Daily log returns — the same basis the tables are computed on."""
+    lr = pd.read_parquet(ART / "returns_daily.parquet").dropna()
     return json.dumps({
-        "dates": [d.strftime("%Y-%m") for d in lr.index],
+        "dates": [d.strftime("%Y-%m-%d") for d in lr.index],
         "strategy": [round(float(v), 6) for v in lr["strategy"]],
         "benchmark": [round(float(v), 6) for v in lr["benchmark"]],
         "spy": [round(float(v), 6) for v in lr["spy"]] if "spy" in lr else [],
@@ -108,6 +108,7 @@ def main():
     periods = pd.read_parquet(ART / "periods.parquet")
     policy = pd.read_parquet(ART / "policy.parquet")
     tests = pd.read_parquet(ART / "tests.parquet")
+    limits = pd.read_parquet(ART / "limitations.parquet")
     weights = pd.read_parquet(ART / "weights_monthly.parquet")
 
     score = int(m["score"])
@@ -198,9 +199,10 @@ def main():
                     "pick": abs(p["budget"] - budget) < 1e-9}
                    for _, p in policy.iterrows()],
         "tests": tests.to_dict("records"),
+        "limits": limits.to_dict("records"),
         "chart_json": chart,
-        "chart_first": json.loads(chart)["dates"][0],
-        "chart_last": json.loads(chart)["dates"][-1],
+        "chart_first": json.loads(chart)["dates"][0][:7],
+        "chart_last": json.loads(chart)["dates"][-1][:7],
         "links": LINKS,
     }
 
@@ -219,7 +221,7 @@ def main():
     print(f"  defensive sleeve: {m['defensive']}")
     print(f"  sharpe {h['sharpe']:.3f} vs {bm['sharpe']:.3f}  "
           f"edge {boot['observed']:+.3f}  p {boot['p_value']:.3f}")
-    print(f"  chart: {len(json.loads(ctx['chart_json'])['dates'])} monthly points")
+    print(f"  chart: {len(json.loads(ctx['chart_json'])['dates'])} daily points")
 
 
 def r_tn(v):

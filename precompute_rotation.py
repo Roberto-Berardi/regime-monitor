@@ -85,9 +85,13 @@ def stats(lr: pd.Series) -> dict:
             "calmar": ann / abs(dd) if dd < 0 else np.nan}
 
 
-def backtest(rets, reg, budget=BUDGET, invvol=True, bonds="switch", tilt=True):
+def backtest(rets, reg, budget=BUDGET, invvol=True, bonds="switch", tilt=True,
+             long_c=None, short_c=None):
     """One configuration. bonds: switch | split | ief"""
-    r = rets[SLEEVES].dropna()
+    long_c = long_c or LONG
+    short_c = short_c or SHORT
+    sleeves = long_c + short_c + ["Bond_Long", "Bond_Short"]
+    r = rets[sleeves].dropna()
     rg = reg.reindex(r.index).ffill().dropna(subset=["score"])
     r = r.loc[rg.index]
 
@@ -98,10 +102,10 @@ def backtest(rets, reg, budget=BUDGET, invvol=True, bonds="switch", tilt=True):
             continue
         cov = hist.tail(VOL_WINDOW).cov() * 252
         if invvol:
-            lw, sw = inverse_vol(cov, LONG), inverse_vol(cov, SHORT)
+            lw, sw = inverse_vol(cov, long_c), inverse_vol(cov, short_c)
         else:
-            lw = pd.Series(1.0 / len(LONG), index=LONG)
-            sw = pd.Series(1.0 / len(SHORT), index=SHORT)
+            lw = pd.Series(1.0 / len(long_c), index=long_c)
+            sw = pd.Series(1.0 / len(short_c), index=short_c)
 
         row = rg.loc[:d].iloc[-1]
         score = int(row["score"]) if tilt else 0
@@ -117,10 +121,10 @@ def backtest(rets, reg, budget=BUDGET, invvol=True, bonds="switch", tilt=True):
         if tot > 0:
             lb, sb = lb * eq / tot, sb * eq / tot
 
-        w = pd.Series(0.0, index=SLEEVES)
-        for c in LONG:
+        w = pd.Series(0.0, index=sleeves)
+        for c in long_c:
             w[c] = lb * lw[c]
-        for c in SHORT:
+        for c in short_c:
             w[c] = sb * sw[c]
         if bonds == "split":
             w["Bond_Long"] = w["Bond_Short"] = dfn / 2
@@ -196,6 +200,10 @@ def main():
     monthly = curves.resample("ME").sum()
     (np.exp(monthly.cumsum()) * 100).to_parquet(OUT / "equity_monthly.parquet")
 
+    # daily log returns for the chart. The page recomputes its KPIs from these,
+    # so they must be on the same basis as every figure in the tables.
+    curves.to_parquet(OUT / "returns_daily.parquet")
+
     # ---- attribution ----
     steps = [
         ("Equal weight, both bonds", dict(invvol=False, bonds="split", tilt=False)),
@@ -247,10 +255,20 @@ def main():
     boot = {"observed": sharpe(a) - sharpe(b), "ci_low": float(lo), "ci_high": float(hi),
             "p_value": float(2 * min((diffs <= 0).mean(), (diffs >= 0).mean()))}
 
+    # ---- four sleeves vs six, for the gold/energy row in section 4 ----
+    four = backtest(rets, reg, long_c=["Growth"], short_c=["Value"])["net"].loc[common]
+    s4, s6 = stats(four), stats(strat_net)
+    gold_energy_note = (
+        f"Sharpe {s6['sharpe']:.3f} from {s4['sharpe']:.3f}, worst loss "
+        f"{s6['max_dd']*100:.1f}% from {s4['max_dd']*100:.1f}%, turnover flat."
+    ).replace("-", "\u2212")
+
+    gv_corr = float(rets[["Growth", "Value"]].dropna().corr().iloc[0, 1])
+
     # ---- tests table (verdicts recorded, not recomputed daily) ----
     pd.DataFrame([
         {"test": "Gold and energy added", "verdict": "kept",
-         "note": "Sharpe 0.812 from 0.744, worst loss −24.0% from −29.9%, turnover flat."},
+         "note": gold_energy_note},
         {"test": "200-day trend filter", "verdict": "rejected",
          "note": "Sharpe 0.98 — the best number of the twenty. But almost all of it "
                  "came from 2008 alone. Remove that one year and the advantage "
@@ -266,6 +284,18 @@ def main():
          "note": "Momentum, credit spreads, vol targeting, GJR-GARCH, VIX, yield "
                  "curve, Taylor gap, HRP, currencies, and seven more."},
     ]).to_parquet(OUT / "tests.parquet")
+
+    # ---- limitations, so the page never carries a stale number ----
+    tilt_delta = float(attribution.iloc[-1]["delta"])
+    pd.DataFrame([
+        {"limit": f"Growth and value correlate {gv_corr:.2f}",
+         "note": "This picks a side of one axis, it doesn't diversify."},
+        {"limit": "Rates fall in easings and in panics",
+         "note": "The model scores both alike; 2008 went the wrong way."},
+        {"limit": f"The tilt adds +{tilt_delta:.3f} of the +{boot['observed']:.3f}",
+         "note": "Volatility weighting and the bond switch do most of the work."},
+        {"limit": "Reads current conditions", "note": "Forecasts nothing."},
+    ]).to_parquet(OUT / "limitations.parquet")
 
     # ---- current readings ----
     last = reg.iloc[-1]

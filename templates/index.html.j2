@@ -288,17 +288,23 @@ h1,h2,h3{margin:0}
 .tip .r{display:flex;justify-content:space-between;gap:22px}
 .tip .r b{font-weight:700}
 
-.kpis{font-family:var(--sans);display:grid;grid-template-columns:repeat(6,1fr);
-  border:1px solid var(--line);border-left:0;margin-top:20px}
-.kpi{padding:14px 16px;border-left:1px solid var(--line)}
-.kpi .k{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);
-  font-weight:700}
-.kpi b{display:block;font-family:var(--mono);font-size:18px;margin-top:6px;font-weight:700}
-.kpi small{display:block;font-size:10.5px;color:var(--grey);margin-top:3px;
-  font-family:var(--mono)}
-.kpi.win b{color:var(--green)}
-.kpi small.ref{color:#AEB9C0}
-
+.kpis{font-family:var(--sans);margin-top:22px}
+.kpis table{width:100%;border-collapse:collapse;font-size:14px}
+.kpis th{text-align:right;font-size:9px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--grey);font-weight:700;padding:0 0 10px;border-bottom:1.5px solid var(--ink)}
+.kpis th:first-child{text-align:left}
+.kpis th.s{color:#1f77b4}
+.kpis th.b{color:#ff7f0e}
+.kpis th.p{color:#7f7f7f}
+.kpis td{text-align:right;padding:12px 0;border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:14px;color:var(--body)}
+.kpis td:first-child{text-align:left;font-family:var(--sans);color:var(--ink)}
+.kpis td.strat{color:var(--ink);font-weight:700}
+.kpis td.diff{font-weight:700}
+.kpis td.up{color:var(--green)}
+.kpis td.dn{color:#B3322C}
+.kpis tr:last-child td{border-bottom:0}
+.kpis .hint{font-size:11px;color:var(--grey);font-family:var(--sans)}
 .costnote{font-family:var(--sans);font-size:12.5px;color:var(--grey);
   margin-top:12px;line-height:1.55}
 .costnote b{color:var(--ink)}
@@ -723,9 +729,9 @@ footer a:hover{text-decoration:underline}
 
     <div class="ctrl">
       <div class="tabs" id="tabs">
-        <button class="tab" data-m="12">1Y</button>
-        <button class="tab" data-m="60">5Y</button>
-        <button class="tab" data-m="120">10Y</button>
+        <button class="tab" data-m="252">1Y</button>
+        <button class="tab" data-m="1260">5Y</button>
+        <button class="tab" data-m="2520">10Y</button>
         <button class="tab on" data-m="0">Full</button>
       </div>
       <div class="range">
@@ -741,15 +747,15 @@ footer a:hover{text-decoration:underline}
       <div class="fig-t">Cumulative return since start of window, net of costs · log scale</div>
       <div class="fig-s" id="figsub">—</div>
       <svg id="chart" viewBox="0 0 1080 430" role="img"
-           aria-label="Cumulative return, strategy against the same book with no tilt"></svg>
+           aria-label="Cumulative return: strategy, equal-weight benchmark, and SPY for reference"></svg>
       <div class="tip" id="tip"></div>
     </div>
 
     <div class="kpis" id="kpis"></div>
 
-    <p class="costnote"><b>SPY is shown for scale, not as a benchmark</b> — it
-      returned more and fell further. All figures are net of 5bp per trade,
-      roughly 0.08% a year at this turnover.</p>
+    <p class="costnote">Positive differences favour the strategy. Excess of the
+      3-month T-bill, net of 5bp per trade. SPY returned more and fell more than
+      twice as far — shown for scale, not as a benchmark.</p>
 
     <div class="verdict">
       <b>The strategy adds {{ edge_full }} of a Sharpe point</b> over holding the
@@ -763,7 +769,7 @@ footer a:hover{text-decoration:underline}
       <div>
         <div class="blk-h">The edge holds in every period</div>
         <table>
-          <thead><tr><th>Period</th><th>Strategy</th><th>No tilt</th><th>Gain</th></tr></thead>
+          <thead><tr><th>Period</th><th>Strategy</th><th>Benchmark</th><th>Gain</th></tr></thead>
           <tbody>
             {% for p in periods %}<tr><td>{{ p.period }}</td><td>{{ p.strategy }}</td>
               <td>{{ p.benchmark }}</td><td class="gain">{{ p.gain }}</td></tr>
@@ -836,28 +842,20 @@ footer a:hover{text-decoration:underline}
           <td><span class="tag k">Kept</span>{{ tests[0].note }}</td>
         </tr>
         <tr>
-          <td>200-day trend filter</td>
-          <td><span class="tag r">Rejected</span>Sharpe 0.98 — the best number of the
-            twenty. But almost all of it came from 2008 alone. Remove that one
-            year and the advantage nearly disappears.</td>
+          <td>{{ tests[1].test }}</td>
+          <td><span class="tag r">Rejected</span>{{ tests[1].note }}</td>
         </tr>
         <tr>
-          <td>PCA correlation warning</td>
-          <td><span class="tag r">Rejected</span>Fired a year before 2008 and three
-            months before Covid. Sees fragility, not timing.</td>
+          <td>{{ tests[2].test }}</td>
+          <td><span class="tag r">Rejected</span>{{ tests[2].note }}</td>
         </tr>
         <tr>
-          <td>Scaling bond duration by score</td>
-          <td><span class="tag r">Rejected</span>Worse in every period. Long bonds lose
-            when rates rise, so partial exposure is a partial loss with no
-            offsetting benefit. In 2022 that cost twice as much: −3.2% against
-            −1.6%.</td>
+          <td>{{ tests[3].test }}</td>
+          <td><span class="tag r">Rejected</span>{{ tests[3].note }}</td>
         </tr>
         <tr>
-          <td>Sixteen others</td>
-          <td><span class="tag r">Rejected</span>Momentum, credit spreads, vol
-            targeting, GJR-GARCH, VIX, yield curve, Taylor gap, HRP, currencies,
-            and seven more.</td>
+          <td>{{ tests[4].test }}</td>
+          <td><span class="tag r">Rejected</span>{{ tests[4].note }}</td>
         </tr>
       </tbody>
     </table>
@@ -866,15 +864,8 @@ footer a:hover{text-decoration:underline}
     <table>
       <thead><tr><th>Limitation</th><th></th></tr></thead>
       <tbody>
-        <tr><td>Growth and value correlate 0.86</td>
-            <td>This picks a side of one axis, it doesn't diversify.</td></tr>
-        <tr><td>Rates fall in easings and in panics</td>
-            <td>The model scores both alike; 2008 went the wrong way.</td></tr>
-        <tr><td>The tilt adds +0.036 of the +0.139</td>
-            <td>Volatility weighting and the bond switch do most of the work.</td></tr>
-        <tr><td>Reads current conditions</td>
-            <td>Forecasts nothing.</td></tr>
-      </tbody>
+        {% for l in limits %}<tr><td>{{ l.limit }}</td><td>{{ l.note }}</td></tr>
+        {% endfor %}</tbody>
     </table>
 
     <div class="method">
@@ -904,9 +895,8 @@ footer a:hover{text-decoration:underline}
     </div>
     <div class="f-legal">
       Research and demonstration purposes. Not investment advice, and not an offer
-      or recommendation to buy or sell any security. Originated as coursework for
-      Empirical Methods in Finance, HEC Lausanne, and extended into a production
-      system.
+      or recommendation to buy or sell any security. Built by Roberto Berardi, applying econometric methods studied
+      during the MSc in Finance at HEC Lausanne.
     </div>
   </div>
 </footer>
@@ -916,8 +906,8 @@ footer a:hover{text-decoration:underline}
   const SERIES = {{ chart_json }};
   const N = SERIES.dates.length, RF = {{ rf_rate }};
   const dates = SERIES.dates.map(d => {
-    const [y, m] = d.split('-').map(Number);
-    return new Date(y, m - 1, 1);
+    const [y, m, dd] = d.split('-').map(Number);
+    return new Date(y, m - 1, dd);
   });
   const series = [SERIES.strategy, SERIES.benchmark, SERIES.spy];
   const maxdd = lr => { let e=1,p=1,d=0;
@@ -928,13 +918,13 @@ footer a:hover{text-decoration:underline}
   const COL=['#1f77b4','#ff7f0e','#7f7f7f'];   // matplotlib tab10
   const DASH=['','','3 3'];
   const WID=[2.2,2.0,1.4];
-  const NM=['Strategy','No tilt','SPY'];
+  const NM=['Strategy','Benchmark','SPY'];
   let cur=[],ddAll=[],xs=null,ys=null,yd=null,i0=0,n=0;
 
-  const stats=lr=>{const k=lr.length,y=k/12;
+  const stats=lr=>{const k=lr.length,y=k/252;
     const tot=Math.exp(lr.reduce((a,b)=>a+b,0)), ann=Math.pow(tot,1/y)-1;
     const mu=lr.reduce((a,b)=>a+b,0)/k;
-    const sd=Math.sqrt(lr.reduce((a,b)=>a+(b-mu)**2,0)/(k-1)), vol=sd*Math.sqrt(12);
+    const sd=Math.sqrt(lr.reduce((a,b)=>a+(b-mu)**2,0)/(k-1)), vol=sd*Math.sqrt(252);
     return{ann,vol,sh:(ann-RF)/vol,dd:maxdd(lr),cum:tot-1};};
   const fmt=d=>d.toLocaleDateString('en-GB',{month:'short',year:'numeric'});
   const pctL=p=>(p>0?'+':'')+p.toFixed(0)+'%';
@@ -1016,18 +1006,40 @@ footer a:hover{text-decoration:underline}
 
     const A=stats(series[0].slice(a,b+1)), B=stats(series[1].slice(a,b+1)),
           C=stats(series[2].slice(a,b+1));
-    const row=(k,x,y,z,f,w)=>`<div class="kpi${w?' win':''}"><div class="k">${k}</div>
-      <b>${f(x)}</b><small>no tilt ${f(y)}</small>
-      <small class="ref">SPY ${f(z)}</small></div>`;
-    const pc=v=>(v*100).toFixed(2)+'%', p1=v=>(v*100).toFixed(1)+'%', n3=v=>v.toFixed(3);
-    document.getElementById('kpis').innerHTML=
-       row('Total return',A.cum,B.cum,C.cum,p1,A.cum>B.cum)
-      +row('Annualised',A.ann,B.ann,C.ann,pc,A.ann>B.ann)
-      +row('Volatility',A.vol,B.vol,C.vol,pc,A.vol<B.vol)
-      +row('Sharpe',A.sh,B.sh,C.sh,n3,A.sh>B.sh)
-      +row('Max drawdown',A.dd,B.dd,C.dd,p1,A.dd>B.dd)
-      +row('Calmar',A.ann/Math.abs(A.dd),B.ann/Math.abs(B.dd),
-           C.ann/Math.abs(C.dd),n3,A.ann/Math.abs(A.dd)>B.ann/Math.abs(B.dd));
+    const pc=v=>(v*100).toFixed(2)+'%', p1=v=>(v*100).toFixed(1)+'%',
+          n3=v=>v.toFixed(3),
+          pp=(x,y,d)=>{const g=(x-y)*(d||1);
+            return (g>=0?'+':'\u2212')+Math.abs(g).toFixed(2)+'pp';},
+          nn=(x,y)=>{const g=x-y;
+            return (g>=0?'+':'\u2212')+Math.abs(g).toFixed(3);};
+
+    const ROWS=[
+      ['Total return', p1(A.cum), p1(B.cum), pp(A.cum,B.cum,100), p1(C.cum),
+       A.cum>=B.cum, ''],
+      ['Annualised return', pc(A.ann), pc(B.ann), pp(A.ann,B.ann,100), pc(C.ann),
+       A.ann>=B.ann, ''],
+      ['Volatility', pc(A.vol), pc(B.vol), pp(A.vol,B.vol,100), pc(C.vol),
+       A.vol<=B.vol, 'lower is better'],
+      ['Sharpe ratio', n3(A.sh), n3(B.sh), nn(A.sh,B.sh), n3(C.sh),
+       A.sh>=B.sh, ''],
+      ['Maximum drawdown', p1(A.dd), p1(B.dd), pp(A.dd,B.dd,100), p1(C.dd),
+       A.dd>=B.dd, ''],
+      ['Calmar ratio', n3(A.ann/Math.abs(A.dd)), n3(B.ann/Math.abs(B.dd)),
+       nn(A.ann/Math.abs(A.dd), B.ann/Math.abs(B.dd)),
+       n3(C.ann/Math.abs(C.dd)), A.ann/Math.abs(A.dd)>=B.ann/Math.abs(B.dd), ''],
+    ];
+
+    document.getElementById('kpis').innerHTML =
+      '<table><thead><tr><th>Metric</th><th class="s">Strategy</th>' +
+      '<th class="b">Benchmark</th><th>Difference</th>' +
+      '<th class="p">SPY</th></tr></thead><tbody>' +
+      ROWS.map(r =>
+        `<tr><td>${r[0]}${r[6] ? ' <span class="hint">'+r[6]+'</span>' : ''}</td>` +
+        `<td class="strat">${r[1]}</td><td>${r[2]}</td>` +
+        `<td class="diff ${r[5] ? 'up' : 'dn'}">${r[3]}</td>` +
+        `<td>${r[4]}</td></tr>`).join('') +
+      '</tbody></table>';
+
     document.getElementById('figsub').textContent=
       `${fmt(dates[a])} → ${fmt(dates[b])} · ${n} months · both panels measured from the window start`;
   }

@@ -1,7 +1,7 @@
 """
 DCC(1,1) correlation filter for the Cross-Asset Regime Monitor.
 
-Faithful port of the DCC recursion from Project 2 (Piras, D'Amico,
+Dynamic conditional correlation recursion (Engle 2002).
 Berardi 2025). Uses fixed parameters (a=0.05, b=0.93) from config,
 matching Engle (2002)'s empirical findings across most asset pairs.
 

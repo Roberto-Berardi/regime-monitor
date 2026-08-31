@@ -1,7 +1,7 @@
 """
 Equal Risk Contribution (ERC) portfolio construction.
 
-Faithful port of Project 2 (Piras, D'Amico, Berardi 2025) ERC solver.
+Equal risk contribution solver.
 Extensions for production:
 - Handles the case where one asset uses EWMA-fallback vol (US_HY)
 - Recursive-safe: uses only DCC covariances from data up to the rebalance date

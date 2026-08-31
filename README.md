@@ -1,88 +1,174 @@
-# Cross-Asset Regime Monitor
+# Rate-Regime Factor Rotation
 
-> Live weekly market brief for multi-asset portfolios.
-> Strategic ERC core + tactical momentum tilt + Markov regime gate.
+A systematic multi-asset portfolio positioned by monetary conditions, rebuilt
+from live data every weekday.
 
-**Author:** Roberto Berardi — MSc Finance, HEC Lausanne
-**Status:** Phases 0-2 complete · Phase 3 in progress (GARCH)
-**Live app:** *coming soon — deployed on Streamlit Cloud in Phase 10*
-**Repo:** [Roberto-Berardi/Regime-Monitor](https://github.com/Roberto-Berardi/Regime-Monitor)
+**Live page — https://roberto-berardi.github.io/regime-monitor/**
 
 ---
 
-## What this project does
+## The idea
 
-Every Monday, this pipeline pulls fresh cross-asset data, refits the models, and publishes a one-page weekly brief that answers three questions a PM asks every morning:
+Interest rates set the discount rate on future cash flows. Companies whose
+profits arrive years from now behave like long-duration bonds; companies
+earning cash today behave like short-duration bonds. That sensitivity is called
+**equity duration**, and it is the single axis this portfolio is built on.
 
-1. **What happened last week** — asset returns, macro data releases, surprises.
-2. **Why** — short commentary linking releases to price action.
-3. **What to do about it** — current portfolio positioning and this week's tilts.
+2022 is the clearest illustration: the Fed raised rates 425bp, growth equity
+fell 29.8%, value equity fell 8.1%. Same market, same year, 21.7 percentage
+points apart.
 
-The engine behind the positioning is a three-layer system:
+## The signal
 
-| Layer | What it does | Method |
-|-------|--------------|--------|
-| Strategic core | Equal Risk Contribution weights across 9 assets | ERC on GARCH-filtered covariance |
-| Tactical tilt | ± 4pp per asset around ERC weights | 12-1M time-series momentum + 200DMA confirmation |
-| Regime gate | Halves tilt magnitude in high-correlation regimes | 2-state Markov switching on weekly stock-bond DCC |
+Two observable inputs, both published by FRED, neither revised.
 
-## Asset universe
+| Input | Series | Window | Threshold | Weight |
+|---|---|---|---|---|
+| Policy rates | DGS2 | 3 months | ±25bp | ±2 |
+| Liquidity | WALCL | 13 weeks | ±1% | ±1 |
 
-9 assets, chosen to span the main risk factors in a multi-asset book:
+Rates count double: the discount-rate effect is arithmetic, while the liquidity
+effect depends on where investors choose to put the cash. The two sum to a
+score from −3 to +3. A state must persist four weeks before it is recognised.
 
-- **Equities:** S&P 500, Euro Stoxx 50, MSCI EM
-- **Rates (duration proxies):** US 2Y, US 10Y
-- **Credit:** US IG, US HY
-- **Commodities:** Gold, WTI Oil
+Every threshold was fixed in advance and justified by an institutional fact
+rather than a backtest result — 25bp is one policy increment, three months is
+one FOMC cycle, four weeks is one rebalance period.
 
-Data sources: Yahoo Finance (equities, commodities, credit ETFs) and FRED (yields, spreads, macro releases). Both free.
+## The portfolio
 
-## Tech stack
+| Bucket | Holdings | Favoured when |
+|---|---|---|
+| Long duration | IWF growth equity, GLD gold | score > 0 |
+| Short duration | IWD value equity, XLE energy | score < 0 |
+| Defensive | IEF 7–10y **or** SHY 1–3y | always 45% |
 
-- **Data & modeling:** pandas, numpy, scipy, statsmodels, arch
-- **App layer:** Streamlit + Plotly
-- **Deployment:** Streamlit Community Cloud + GitHub Actions (weekly refresh)
-- **Environment:** Python 3.11, conda
+**55% risk assets / 45% defensive**, a stated policy rather than an optimiser
+output. Within each duration bucket, capital is split inversely to volatility.
+The score moves up to 10 percentage points between the two buckets — a transfer,
+not a split. The defensive sleeve switches on the rate signal: short duration
+while rates rise, long when they fall, because duration is a hedge in a growth
+shock and a liability in a rate shock.
 
-## Repository layout
+Monthly rebalance, 2pp no-trade band, 5bp one-way transaction costs.
 
-    regime-monitor/
-    ├── app/          # Streamlit web app
-    ├── src/          # Analytics modules (data, returns, garch, dcc, regime, erc, tilt)
-    ├── data/         # Cached parquet snapshots (gitignored)
-    ├── notebooks/    # Exploratory work
-    ├── tests/        # Sanity checks
-    ├── config.py     # Central configuration — every model assumption
-    └── requirements.txt
+## Results
 
-Every model constant (GARCH spec, DCC parameters, tilt cap, regime threshold, transaction costs, return cap) lives in `config.py`. If a choice needs defending, the answer is one line in that file.
+February 2006 – August 2026. Sharpe is excess of the 3-month Treasury
+bill. Figures as at August 2026 — the live page is always current.
 
-## Foundations
+| | Strategy | Benchmark | SPY |
+|---|---|---|---|
+| Annualised return | 6.89% | 6.20% | 10.76% |
+| Volatility | 8.21% | 8.96% | 18.92% |
+| Sharpe | **0.624** | 0.495 | 0.475 |
+| Maximum drawdown | −24.0% | −25.2% | −55.2% |
 
-Built on empirical methods coursework at HEC Lausanne (EMiF Project 2), extended for production: recursive parameter estimation to prevent look-ahead in the regime gate, transaction-cost accounting in the backtest, cached data with stale-data fallback so the deployed app degrades gracefully.
+The benchmark is the same six assets held in fixed equal weights, bought once
+and never traded. SPY is shown for scale, not as a benchmark.
 
-## Build log
+**The edge is +0.129 Sharpe**, 95% bootstrap interval +0.045 to +0.234,
+p = 0.004. It holds in all three sub-periods tested and is largest in the window
+that excludes 2008.
 
-- **Phase 0** — Project skeleton, environment (Python 3.11 conda), config, git+GitHub setup.
-- **Phase 1** — Data layer: Yahoo + FRED downloaders, parquet cache, 4-check validator, graceful cache fallback (tested against simulated Yahoo outage).
-- **Phase 2** — Returns module: log returns for prices, modified-duration proxies for bonds, ±25% winsorization for extreme events. Reconciled against EMiF Project 2 — 5/5 comparable assets within 5% relative deviation.
+### What each part contributes
 
-## Data notes
+| | Sharpe | Adds |
+|---|---|---|
+| Equal weight, both bonds | 0.495 | — |
+| + volatility weighting | 0.533 | +0.037 |
+| + switching bond sleeve | 0.593 | +0.060 |
+| + regime tilt | **0.624** | +0.031 |
 
-- **Free-data limitation:** FRED restricted ICE BofA credit spread series to a rolling 3-year window in April 2026 (licensing change with ICE Data Indices). Long-history context uses Moody's Baa/Aaa Fed-computed proxies. Documented in `config.py`.
-- **Winsorization:** daily returns are capped at ±25% per asset before entering any model. The 2020-04-20 WTI negative-price event and 2008 EM equity outliers survive as extreme days but no longer dominate volatility estimation. Sign and direction preserved.
-- **Instrument choice:** US IG and US HY use LQD and HYG ETFs (Yahoo) rather than bond total-return indices; MSCI EM uses the EEM ETF. ETF vols run 2-6pp higher than the index equivalents — a documented trade-off in favour of intraday-refreshable data.
+The tilt is the smallest of the three contributions.
+
+## What was tested and rejected
+
+Twenty variations, judged against three conditions fixed before each ran:
+improve Sharpe by more than 0.05, hold in all three periods, raise turnover by
+less than half. **Nineteen failed.**
+
+Rejected: 200-day trend filter · PCA correlation early warning · scaling bond
+duration by score · momentum tilt · credit-spread override · volatility
+targeting · GJR-GARCH · turbulence · VIX level · VIX term structure ·
+yield-curve veto · Taylor rule gap · hierarchical risk parity ·
+regime-conditional covariance · regime-conditional risk budget · split
+defensive sleeve · safe-haven currencies · dollar index · European equity ·
+long Treasuries.
+
+Two are worth reading about on the live page. The 200-day trend filter produced
+the best headline of the twenty and lost almost all of it when 2008 was removed.
+The correlation early-warning signal fired a year before the financial crisis
+and three months before Covid, and still could not be traded — it sees
+fragility, not timing.
 
 ## Limitations
 
-Pedagogical demonstration, not investment advice. Bonds are represented via modified-duration return proxies, not investable instruments. DCC parameters follow Engle (2002) convention rather than QMLE estimation in the base spec. Full limitations section is displayed inside the deployed app.
+- Growth and value correlate 0.87. This picks a side of one axis; it is not
+  diversification.
+- Rates fall when policy eases and when investors panic. The model scores both
+  alike, so 2008 went the wrong way.
+- The model reads conditions that already exist. It forecasts nothing.
 
-## References
+## Running it
 
-- Engle, R. (2002). *Dynamic conditional correlation.* JBES 20(3).
-- Maillard, S., Roncalli, T., & Teiletche, J. (2010). *The properties of equally weighted risk contribution portfolios.* J. of Portfolio Management.
-- Moskowitz, T. J., Ooi, Y. H., & Pedersen, L. H. (2012). *Time series momentum.* JFE 104(2).
+```bash
+conda create -n regime python=3.11 && conda activate regime
+pip install -r requirements.txt
+export FRED_API_KEY=your_key          # free from fred.stlouisfed.org
+python precompute_rotation.py         # ~20s, writes data/rotation/
+python scripts/check_rotation.py      # 41 validation checks
+python scripts/build_site.py          # renders docs/index.html
+```
 
----
+Serve the page over HTTP rather than opening the file directly — Chrome blocks
+the chart under `file://`.
 
-*This project is a public portfolio piece for MSc Finance internship applications. Feedback welcome via Issues.*
+```bash
+cd docs && python -m http.server 8000
+```
+
+## How it stays live
+
+A GitHub Actions workflow runs every weekday at 06:15 UTC: pull data, run the
+pipeline, validate, rebuild the page, commit. The validation gate checks
+structure *and* plausibility — that headline metrics fall inside sensible
+bounds, and that the maximum drawdown has not moved more than 5 percentage
+points since the previous build. A failure stops the workflow, so the last good
+page stays up and the date on the page stops moving.
+
+## Repository
+
+```
+precompute_rotation.py     the pipeline
+src/rate_regime.py         the threshold rule
+src/rotation.py            the backtest
+scripts/check_rotation.py  the validation gate
+scripts/build_site.py      renders the page from the artifacts
+templates/                 the page template
+data/rotation/             committed artifacts
+research/                  the twenty tests
+archive/                   see below
+```
+
+### Earlier work
+
+This project began as a nine-asset equal-risk-contribution portfolio. Testing
+it properly showed that ERC concentrated the book in whichever asset happened to
+be calmest — at one point half the portfolio sat in a single Treasury proxy —
+and that the construction suited the method rather than the question. That code
+is preserved under `archive/` and no longer runs.
+
+The econometric techniques used here — GARCH volatility modelling, dynamic
+conditional correlation, Markov regime estimation — were studied during the MSc
+in Finance at HEC Lausanne and applied to this project independently.
+
+## Data
+
+Yahoo Finance for prices, FRED (Federal Reserve Bank of St. Louis) for rates and
+the Federal Reserve balance sheet.
+
+## Disclaimer
+
+Research and demonstration purposes. Not investment advice, and not an offer or
+recommendation to buy or sell any security.

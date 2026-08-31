@@ -8,7 +8,7 @@ this file. Do not hardcode constants elsewhere.
 # ---------------------------------------------------------------------------
 # 1. ASSET UNIVERSE
 # ---------------------------------------------------------------------------
-# 9 assets from EMiF Project 2. Yahoo Finance tickers.
+# Yahoo Finance tickers.
 # Bonds are represented via yields (from FRED) later converted to return
 # proxies via modified duration in src/returns.py.
 ASSETS = {
