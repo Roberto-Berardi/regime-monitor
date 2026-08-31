@@ -300,10 +300,23 @@ def main():
     # ---- current readings ----
     last = reg.iloc[-1]
     latest_w = strat["weights"].iloc[-1]
-    two = panel["US_2Y"].dropna()
-    wal = panel["WALCL"].dropna()
-    look_d = 63    # ~3 months of daily observations
-    look_w = 13    # 13 weekly observations
+    # Derive the window endpoints from the SAME shift the regime rule uses, so
+    # the start value and the change always reconcile. Computing them
+    # independently produced cards where 4.05% -> 4.34% sat beside "+26bp".
+    from src.rate_regime import RATE_LOOKBACK_DAYS, LIQ_LOOKBACK_DAYS
+
+    two_ff = panel["US_2Y"].ffill().dropna()
+    wal_ff = panel["WALCL"].ffill().dropna()
+    two_obs = panel["US_2Y"].dropna()
+    wal_obs = panel["WALCL"].dropna()
+
+    rate_to = float(two_ff.iloc[-1])
+    rate_from = rate_to - float(last["rate_chg_bp"]) / 100.0
+    rate_from_date = two_ff.index[-(RATE_LOOKBACK_DAYS + 1)]
+
+    liq_to = float(wal_ff.iloc[-1])
+    liq_from = liq_to / (1.0 + float(last["liq_chg_pct"]) / 100.0)
+    liq_from_date = wal_ff.index[-(LIQ_LOOKBACK_DAYS + 1)]
 
     yrs = len(strat_net) / 252
     meta = {
@@ -312,17 +325,15 @@ def main():
                       "series": "DGS3MO"},
         "data_as_of": str(panel.index[-1].date()),
         "rates": {
-            "series": "DGS2", "last_obs": str(two.index[-1].date()),
-            "from_date": str(two.index[-min(look_d, len(two))].date()),
-            "from_value": float(two.iloc[-min(look_d, len(two))]),
-            "to_value": float(two.iloc[-1]),
+            "series": "DGS2", "last_obs": str(two_obs.index[-1].date()),
+            "from_date": str(rate_from_date.date()),
+            "from_value": rate_from, "to_value": rate_to,
             "change_bp": float(last["rate_chg_bp"]), "state": last["rate"],
         },
         "liquidity": {
-            "series": "WALCL", "last_obs": str(wal.index[-1].date()),
-            "from_date": str(wal.index[-min(look_w, len(wal))].date()),
-            "from_value": float(wal.iloc[-min(look_w, len(wal))]),
-            "to_value": float(wal.iloc[-1]),
+            "series": "WALCL", "last_obs": str(wal_obs.index[-1].date()),
+            "from_date": str(liq_from_date.date()),
+            "from_value": liq_from, "to_value": liq_to,
             "change_pct": float(last["liq_chg_pct"]), "state": last["liq"],
         },
         "score": int(last["score"]),
