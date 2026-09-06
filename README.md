@@ -3,7 +3,7 @@
 A systematic multi-asset portfolio positioned by monetary conditions, rebuilt
 from live data every weekday.
 
-**Live page — https://roberto-berardi.github.io/regime-monitor/**
+**Live page: https://roberto-berardi.github.io/regime-monitor/**
 
 ---
 
@@ -32,7 +32,7 @@ effect depends on where investors choose to put the cash. The two sum to a
 score from −3 to +3. A state must persist four weeks before it is recognised.
 
 Every threshold was fixed in advance and justified by an institutional fact
-rather than a backtest result — 25bp is one policy increment, three months is
+rather than a backtest result. 25bp is one policy increment, three months is
 one FOMC cycle, four weeks is one rebalance period.
 
 ## The portfolio
@@ -45,8 +45,8 @@ one FOMC cycle, four weeks is one rebalance period.
 
 **55% risk assets / 45% defensive**, a stated policy rather than an optimiser
 output. Within each duration bucket, capital is split inversely to volatility.
-The score moves up to 10 percentage points between the two buckets — a transfer,
-not a split. The defensive sleeve switches on the rate signal: short duration
+The score moves up to 10 percentage points between the two buckets, a transfer
+rather than a split. The defensive sleeve switches on the rate signal: short duration
 while rates rise, long when they fall, because duration is a hedge in a growth
 shock and a liability in a rate shock.
 
@@ -55,7 +55,7 @@ Monthly rebalance, 2pp no-trade band, 5bp one-way transaction costs.
 ## Results
 
 February 2006 – August 2026. Sharpe is excess of the 3-month Treasury
-bill. Figures as at August 2026 — the live page is always current.
+bill. Figures as at August 2026; the live page is always current.
 
 | | Strategy | Benchmark | SPY |
 |---|---|---|---|
@@ -99,7 +99,7 @@ long Treasuries.
 Two are worth reading about on the live page. The 200-day trend filter produced
 the best headline of the twenty and lost almost all of it when 2008 was removed.
 The correlation early-warning signal fired a year before the financial crisis
-and three months before Covid, and still could not be traded — it sees
+and three months before Covid, and still could not be traded. It sees
 fragility, not timing.
 
 ## Limitations
@@ -121,7 +121,7 @@ python scripts/check_rotation.py      # 41 validation checks
 python scripts/build_site.py          # renders docs/index.html
 ```
 
-Serve the page over HTTP rather than opening the file directly — Chrome blocks
+Serve the page over HTTP rather than opening the file directly. Chrome blocks
 the chart under `file://`.
 
 ```bash
@@ -132,7 +132,7 @@ cd docs && python -m http.server 8000
 
 A GitHub Actions workflow runs every weekday at 06:15 UTC: pull data, run the
 pipeline, validate, rebuild the page, commit. The validation gate checks
-structure *and* plausibility — that headline metrics fall inside sensible
+structure *and* plausibility: that headline metrics fall inside sensible
 bounds, and that the maximum drawdown has not moved more than 5 percentage
 points since the previous build. A failure stops the workflow, so the last good
 page stays up and the date on the page stops moving.
@@ -155,12 +155,12 @@ archive/                   see below
 
 This project began as a nine-asset equal-risk-contribution portfolio. Testing
 it properly showed that ERC concentrated the book in whichever asset happened to
-be calmest — at one point half the portfolio sat in a single Treasury proxy —
+be calmest, at one point half the portfolio sitting in a single Treasury proxy,
 and that the construction suited the method rather than the question. That code
 is preserved under `archive/` and no longer runs.
 
-The econometric techniques used here — GARCH volatility modelling, dynamic
-conditional correlation, Markov regime estimation — were studied during the MSc
+The econometric techniques used here, GARCH volatility modelling, dynamic
+conditional correlation and Markov regime estimation, were studied during the MSc
 in Finance at HEC Lausanne and applied to this project independently.
 
 ## Data
