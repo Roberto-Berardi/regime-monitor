@@ -23,8 +23,12 @@ ART = ROOT / "data" / "rotation"
 DOCS = ROOT / "docs"
 TPL = ROOT / "templates"
 
-LINKS = {"email": "", "linkedin": "", "cv": "",
-         "github": "https://github.com/Roberto-Berardi/regime-monitor"}
+LINKS = {
+    "email": "berardiroberto30@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/roberto-berardi-329b26354",
+    "cv": "",          # set once the CV PDF is in docs/
+    "github": "https://github.com/Roberto-Berardi/regime-monitor",
+}
 
 # score -> accent colour, per the agreed spec
 ACCENT = {3: "#6D4AE0", 2: "#6D4AE0", 1: "#8B6BE8", 0: "#8A99A2",
