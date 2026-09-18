@@ -437,16 +437,35 @@ footer a:hover{text-decoration:underline}
   .c{width:calc(100% - 28px)}
 
   /* wide tables scroll instead of crushing */
-  /* overflow-x is ignored on <table>; display:block makes it apply */
+  /* Wide tables scroll sideways, but the label column stays pinned so the
+     reader always knows which row the numbers belong to. overflow-x is
+     ignored on <table>, hence display:block. */
   .kpis table, .s3 .two table{display:block;overflow-x:auto;
-    -webkit-overflow-scrolling:touch;white-space:nowrap;width:100%}
+    -webkit-overflow-scrolling:touch;white-space:nowrap;width:100%;
+    border-collapse:separate;border-spacing:0}
   .kpis table thead, .s3 .two table thead,
-  .kpis table tbody, .s3 .two table tbody{display:table;width:100%;
-    min-width:520px;table-layout:fixed}
-  .s3 .two table thead, .s3 .two table tbody{min-width:400px}
-  .kpis td:first-child, .s3 .two td:first-child{white-space:normal}
+  .kpis table tbody, .s3 .two table tbody{display:table;width:max-content;
+    min-width:100%}
+
+  .kpis th:first-child, .kpis td:first-child,
+  .s3 .two th:first-child, .s3 .two td:first-child{
+    position:sticky;left:0;z-index:2;background:#fff;
+    white-space:normal;min-width:118px;max-width:118px;
+    padding-right:12px;
+    box-shadow:6px 0 6px -5px rgba(11,31,42,.13)}
+
+  .kpis th:not(:first-child), .kpis td:not(:first-child),
+  .s3 .two th:not(:first-child), .s3 .two td:not(:first-child){
+    min-width:84px;padding-left:12px}
+
+  /* the tinted policy row needs the pinned cell tinted too */
+  .s3 tr.pick td:first-child{background:var(--short-soft)}
+
   .kpis .hint{display:none}
   .s4 table{width:100%}
+
+  /* a hint that there is more to the right */
+  .kpis, .s3 .two > div{position:relative}
   .s4 td:first-child{width:auto}
 
   /* allocation: stack, and give the asset rows room */
@@ -488,11 +507,12 @@ footer a:hover{text-decoration:underline}
   .question .b{font-size:19px}
 
   /* hero */
-  .hero{padding:38px 0 34px}
-  .hero-in{gap:22px}
-  .avatar{width:120px;height:120px;flex:0 0 120px}
-  .hero h1{font-size:34px}
-  .intro{font-size:15.5px}
+  .hero{padding:44px 0 38px}
+  .hero-in{gap:26px}
+  .avatar{width:168px;height:168px;flex:0 0 168px}
+  .hero h1{font-size:44px}
+  .cred{font-size:16px}
+  .intro{font-size:16px}
 
   /* chart controls */
   .ctrl{gap:12px}
@@ -512,8 +532,8 @@ footer a:hover{text-decoration:underline}
 }
 
 @media(max-width:480px){
-  .hero h1{font-size:29px}
-  .avatar{width:96px;height:96px;flex:0 0 96px}
+  .hero h1{font-size:38px}
+  .avatar{width:150px;height:150px;flex:0 0 150px}
   .question p{font-size:21px}
   .question .b{font-size:17px}
   .mech h2,.s2 h2,.s3 h2,.s4 h2{font-size:21px}
