@@ -26,7 +26,7 @@ TPL = ROOT / "templates"
 LINKS = {
     "email": "berardiroberto30@gmail.com",
     "linkedin": "https://www.linkedin.com/in/roberto-berardi-329b26354",
-    "cv": "",          # set once the CV PDF is in docs/
+    "cv": "Roberto_Berardi_CV.pdf",
     "github": "https://github.com/Roberto-Berardi/regime-monitor",
 }
 
