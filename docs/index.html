@@ -431,6 +431,96 @@ footer a:hover{text-decoration:underline}
   .s4 tr{display:block;border-bottom:1px solid var(--line);padding:12px 0}
   .s4 td{display:block;border:0;padding:3px 0}
 }
+
+/* ══════════ MOBILE ══════════ */
+@media(max-width:820px){
+  .c{width:calc(100% - 28px)}
+
+  /* wide tables scroll instead of crushing */
+  /* overflow-x is ignored on <table>; display:block makes it apply */
+  .kpis table, .s3 .two table{display:block;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;white-space:nowrap;width:100%}
+  .kpis table thead, .s3 .two table thead,
+  .kpis table tbody, .s3 .two table tbody{display:table;width:100%;
+    min-width:520px;table-layout:fixed}
+  .s3 .two table thead, .s3 .two table tbody{min-width:400px}
+  .kpis td:first-child, .s3 .two td:first-child{white-space:normal}
+  .kpis .hint{display:none}
+  .s4 table{width:100%}
+  .s4 td:first-child{width:auto}
+
+  /* allocation: stack, and give the asset rows room */
+  .alloc2{grid-template-columns:1fr;gap:26px}
+  .groups{width:100%}
+  .grp{padding:14px 16px}
+  .gassets div{grid-template-columns:1fr auto;gap:10px}
+  .gassets .vol{display:none}
+  .ghd{flex-wrap:wrap;gap:4px}
+  .gname{font-size:13.5px}
+  .gmove{font-size:12px}
+
+  /* tilt table */
+  .tilt-tbl{font-size:12px;gap:0 10px}
+  .formula{font-size:11px;padding:10px 12px}
+
+  /* gauge: smaller, fewer collisions */
+  .gauge{height:104px}
+  .gauge .num{font-size:9.5px}
+  .gauge .tag{font-size:11px;padding:0 4px}
+  .gauge .cap{font-size:8.5px;letter-spacing:.06em}
+  .gauge .cap.l,.gauge .cap.r{max-width:44%}
+
+  /* regime bands */
+  .band{grid-template-columns:1fr;gap:4px;padding:11px 14px;font-size:13px}
+  .band .now{justify-self:start}
+
+  /* FRED cards and parameters */
+  .params{grid-template-columns:1fr;gap:12px}
+  .pcard{padding:15px 16px}
+  .pcard .move{font-size:14px}
+
+  /* headings and leads */
+  .mech h2,.s2 h2,.s3 h2,.s4 h2{font-size:23px}
+  .lead,.s2 .summary,.s3 .summary{font-size:16px}
+  .stance-box{padding:20px 20px}
+  .stance-box p{font-size:16.5px}
+  .question p{font-size:24px}
+  .question .b{font-size:19px}
+
+  /* hero */
+  .hero{padding:38px 0 34px}
+  .hero-in{gap:22px}
+  .avatar{width:120px;height:120px;flex:0 0 120px}
+  .hero h1{font-size:34px}
+  .intro{font-size:15.5px}
+
+  /* chart controls */
+  .ctrl{gap:12px}
+  .tabs{width:100%}
+  .tab{flex:1;padding:8px 6px;font-size:12px}
+  .range{width:100%;flex-wrap:wrap;gap:6px}
+  .range input{flex:1;min-width:120px}
+
+  /* section 4 */
+  .conds{grid-template-columns:1fr}
+  .cond+.cond{border-left:0;border-top:1px solid var(--line)}
+  .rules{grid-template-columns:1fr}
+  .rule+.rule{border-left:0;border-top:1px solid var(--line)}
+
+  /* footer */
+  .f-top{flex-direction:column;gap:16px}
+}
+
+@media(max-width:480px){
+  .hero h1{font-size:29px}
+  .avatar{width:96px;height:96px;flex:0 0 96px}
+  .question p{font-size:21px}
+  .question .b{font-size:17px}
+  .mech h2,.s2 h2,.s3 h2,.s4 h2{font-size:21px}
+  .gauge .cap{display:none}
+  .fig-s{font-size:10.5px}
+}
+
 </style>
 </head>
 <body>
@@ -918,7 +1008,7 @@ footer a:hover{text-decoration:underline}
     <div class="f-top">
       <div class="f-src">
         <b>Data</b> · Yahoo Finance · FRED, Federal Reserve Bank of St. Louis<br>
-        Rebuilt every weekday at 06:15 UTC. Page last built 18 Sep 2026, 11:18.
+        Rebuilt every weekday at 06:15 UTC. Page last built 18 Sep 2026, 17:05.
       </div>
       <div class="f-links">
         <a href="mailto:berardiroberto30@gmail.com">Email</a>
