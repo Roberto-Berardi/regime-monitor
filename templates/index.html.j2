@@ -432,6 +432,20 @@ footer a:hover{text-decoration:underline}
   .s4 td{display:block;border:0;padding:3px 0}
 }
 
+/* ══════════ OVERFLOW CONTAINMENT ══════════
+   Grid and flex children default to min-width:auto and cannot shrink below
+   their content. A wide table then stretches its column, the column stretches
+   the page, and the page scrolls sideways. min-width:0 puts the overflow back
+   inside the element that should be scrolling. */
+html{overflow-x:hidden}
+body{overflow-x:hidden;max-width:100%}
+.c{max-width:100%}
+.two > div, .alloc2 > div, .grid3 > div, .boxes > div,
+.rules > div, .conds > div, .params > div, .groups > div,
+.tiltcol, .kpis, .fig{min-width:0}
+.s3 .two table, .kpis table{max-width:100%}
+img, svg{max-width:100%}
+
 /* ══════════ MOBILE ══════════ */
 @media(max-width:820px){
   .c{width:calc(100% - 28px)}
@@ -457,6 +471,12 @@ footer a:hover{text-decoration:underline}
   .kpis th:not(:first-child), .kpis td:not(:first-child),
   .s3 .two th:not(:first-child), .s3 .two td:not(:first-child){
     min-width:84px;padding-left:12px}
+
+  /* the two blocks inside .two are grid children and must be allowed to
+     shrink, or their tables push the page wide instead of scrolling */
+  .s3 .two{display:block}
+  .s3 .two > div{min-width:0;max-width:100%;overflow:hidden}
+  .s3 .two > div + div{margin-top:30px}
 
   /* the tinted policy row needs the pinned cell tinted too */
   .s3 tr.pick td:first-child{background:var(--short-soft)}
