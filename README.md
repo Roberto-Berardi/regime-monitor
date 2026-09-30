@@ -147,7 +147,7 @@ scripts/check_rotation.py  the validation gate
 scripts/build_site.py      renders the page from the artifacts
 templates/                 the page template
 data/rotation/             committed artifacts
-research/                  the twenty tests
+research/                  scripts for four of the twenty tests (the rest were one-off runs, summarised on the page)
 archive/                   see below
 ```
 
